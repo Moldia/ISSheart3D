@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "---\ntitle: \"Getting RCPs into the atlas\"\noutput: rmarkdown::github_document\nalways_allow_html: yes\n---\n\n```{r setup, include=FALSE}\nknitr::opts_chunk$set(echo = TRUE)\n```\n\n## Description of the data\n\nBegin by loading some pre-processed data:\n```{r}\nload('./data/some_DAPI.RData')\n```\n\nIn this case this is a segmentation data frame so lets check what variables are needed:\n\n```{r}\nhead(segmentation)\n```\n\nWe can test just to plot it first:\n  \n```{r}\nplot(segmentation$x, segmentation$y, pch=16, cex=0.25, ylim=rev(range(segmentation$y)), asp=1)\n```\n\nLets source the helper functions in R we need (they are located under the r folder in this Rproject)\n```{r}\nsource('./r/helper_functions.R')\n```\n\nI downsampled the original image to 8255 x 9410 from the original 16510 x 18819 which is roughly 0.5.\nSo if your RCP centroids are in original pixel coordinates just downsample them `segmentation[,1:2] <- 0.5*segmentation[,1:2]`.\n\nOther than that you are ready to just transform them to the atlas by this command:\n\n```{r message=FALSE, results='hide',fig.keep='all', warning=FALSE}\n#load in the sp and png package\nif(!require(\"sp\")){\n  install.packages(\"sp\")\n  library(\"sp\")\n}\nif(!require(\"png\")){\n  install.packages(\"png\")\n  library(\"png\")\n}\n#load in the registration transformation\nload('./data/ISS_regi6_5weeks.RData')\n#get your dataset object\ndataset<-rcp.to.atlas(regi, segmentation)\n```\n\nLets check it out:\n```{r}\nhead(dataset)\n```\nTo get how many RCPs you have in agiven region check for example:\n```{r}\ntable(dataset$acronym)\n```\n\nWe can also plot this:\n\n```{r}\npar(mfrow=c(1,3), mar=c(0,0,0,0))\nplot.regi(regi)\nplot.regi(regi, draw.trans.grid = TRUE)\nplot.regi(regi)\npoints(dataset$x, dataset$y, col = as.character(dataset$color), pch=16, cex=0.125)\n```\n",
+    "created" : 1558681328918.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1782999709",
+    "id" : "BAC6E97C",
+    "lastKnownWriteTime" : 1558684113,
+    "last_content_update" : 1558684113726,
+    "path" : "~/Documents/GitHub/RCPatlas/README.Rmd",
+    "project_path" : "README.Rmd",
+    "properties" : {
+        "tempName" : "Untitled2"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
