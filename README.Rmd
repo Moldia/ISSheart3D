@@ -48,7 +48,7 @@ if(!require("png")){
   library("png")
 }
 #load in the registration transformation
-load('./data/ISS_regi6_5weeks.RData')
+load('./data/ISS_regi6_5weeks_regV2.RData')
 #get your dataset object
 dataset<-rcp.to.atlas(regi, segmentation)
 ```
@@ -107,6 +107,9 @@ perspective<-list(FOV = 30, ignoreExtent = FALSE, listeners = 1L,
 Lets plot the entire heart and then regions outlines.
 
 ``` r
+#remove NA (cells/RCPs outside of the heart)
+datasetClean <- dataset[!is.na(dataset$acronym),]
+
 #open 3D plot window
 open3d(windowRect = c(0, 0, 1280, 720))
 #use the perspective
@@ -114,14 +117,14 @@ par3d(perspective)
 #draw high-resolution heart. If you want low resolution then change organ to organ.dwnsmp
 drawScene.rgl(organ[which(names(organ.dwnsmp)%in%c('WH'))])
 #add anterior posterio value from registration file
-dataset$anterior.posterior<-rep(atlasIndex[which(atlasIndex[,2]==regi$coordinate), 1], length(dataset$right.left))
+#datasetClean$anterior.posterior<-rep(atlasIndex[which(atlasIndex[,2]==regi$coordinate), 1], length(dataset$right.left))
 #draw the points
-points3d(598-dataset$rostral.caudal, 
-         532-dataset$right.left, 
+points3d(598-datasetClean$rostral.caudal, 
+         532-datasetClean$right.left, 
          dataset$anterior.posterior, 
          alpha = 0.5, 
          size = 0.5, 
-         color = "black")
+         color = datasetClean$color)
 #save image as PNG
 rgl.snapshot(filename='./data/3d_heart_RCPs.png')
 ```

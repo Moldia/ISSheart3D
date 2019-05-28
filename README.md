@@ -53,7 +53,7 @@ if(!require("png")){
   library("png")
 }
 #load in the registration transformation
-load('./data/ISS_regi6_5weeks.RData')
+load('./data/ISS_regi6_5weeks_regV2.RData')
 #get your dataset object
 dataset<-rcp.to.atlas(regi, segmentation)
 ```
@@ -65,19 +65,19 @@ head(dataset)
 ```
 
     ##          x        y intensity area id   color acronym right.left
-    ## 1 4292.889 9385.777  2885.750    6 NA #000000    <NA>   177.6420
-    ## 2 4262.615 9392.975  4528.455   52 NA #000000    <NA>   176.0549
-    ## 3 4246.311 9373.688  4970.923   30 NA #000000    <NA>   176.3393
-    ## 4 4201.455 9378.637  3419.029   88 NA #000000    <NA>   174.3902
-    ## 5 4138.000 9371.394  2034.167   44 NA #000000    <NA>   171.9662
-    ## 6 4076.000 9366.000  2969.250    4 NA #000000    <NA>   169.6994
+    ## 1 4292.889 9385.777  2885.750    6 NA #000000    <NA>   187.3178
+    ## 2 4262.615 9392.975  4528.455   52 NA #000000    <NA>   184.5779
+    ## 3 4246.311 9373.688  4970.923   30 17 #0B61A4      RV   184.5679
+    ## 4 4201.455 9378.637  3419.029   88 17 #0B61A4      RV   181.5681
+    ## 5 4138.000 9371.394  2034.167   44 17 #0B61A4      RV   177.2570
+    ## 6 4076.000 9366.000  2969.250    4 17 #0B61A4      RV   173.3528
     ##   rostral.caudal
-    ## 1       512.2987
-    ## 2       512.3581
-    ## 3       510.6952
-    ## 4       510.3416
-    ## 5       509.1041
-    ## 6       507.7515
+    ## 1       533.7968
+    ## 2       534.9030
+    ## 3       532.7968
+    ## 4       533.2968
+    ## 5       532.7221
+    ## 6       532.3415
 
 To get how many RCPs you have in agiven region check for example:
 
@@ -86,8 +86,8 @@ table(dataset$acronym)
 ```
 
     ## 
-    ##  epc   LV   OT    P   RA   RV   WH 
-    ##   33 8387  815  702   37 8203 6141
+    ##  epc   LA   LV   OT   RA   RV   WH 
+    ##   63 3459 8133 2363 2218 7283  821
 
 We can also plot this:
 
@@ -145,7 +145,12 @@ drawScene.rgl(organ[which(names(organ.dwnsmp)%in%c('WH'))])
 #add anterior posterio value from registration file
 dataset$anterior.posterior<-rep(atlasIndex[which(atlasIndex[,2]==regi$coordinate), 1], length(dataset$right.left))
 #draw the points
-points3d(598-dataset$rostral.caudal, 532-dataset$right.left, dataset$anterior.posterior, alpha = 0.5, size = 0.5, color = black)
+points3d(598-dataset$rostral.caudal, 
+         532-dataset$right.left, 
+         dataset$anterior.posterior, 
+         alpha = 0.5, 
+         size = 0.5, 
+         color = "black")
 #save image as PNG
 rgl.snapshot(filename='./data/3d_heart_RCPs.png')
 ```

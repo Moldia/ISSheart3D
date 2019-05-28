@@ -31,7 +31,7 @@ rcp.to.atlas<-function(registration, segmentation, atlas='c18heart'){
   
   segmentation$acronym <- featureregion
   segmentation$color <- featurecolor
-  dataset <- data.frame(x = segmentation$x, y = segmentation$y, intensity = segmentation$intensity, area = segmentation$area, id = ontology$id[match(segmentation$acronym, ontology$acronym)], color = segmentation$color, acronym = segmentation$acronym)
+  dataset <- data.frame(x = segmentation$x, y = segmentation$y, intensity = segmentation$intensity, area = segmentation$area, id = ontology$id[match(segmentation$acronym, ontology$acronym)], color = as.character(segmentation$color), acronym = segmentation$acronym)
   
   index <- round(scale.factor * cbind( dataset$y,  dataset$x ))
   index[index == 0] <- 1
@@ -56,6 +56,7 @@ rcp.to.atlas<-function(registration, segmentation, atlas='c18heart'){
   
   dataset$right.left <- right.left
   dataset$rostral.caudal <- rostral.caudal
+  dataset$anterior.posterior<-rep(atlasIndex[which(atlasIndex[,2]==registration$coordinate), 1], length(dataset$right.left))
   
   
   return(dataset)
