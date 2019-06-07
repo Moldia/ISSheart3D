@@ -66,6 +66,7 @@ We can also plot this:
 
 ```{r}
 par(mfrow=c(1,4), mar=c(0,0,0,0))
+regi$outputfile = './data/output_week6_5_dwnsmp/Registration_week6_5_dwnsmp'
 plot.regi(regi)
 plot.regi(regi, draw.trans.grid = TRUE)
 plot.regi(regi)
