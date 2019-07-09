@@ -18,4 +18,3 @@ colnames(in.coord) = c("intensity", "x", "y", "area")
 
 out.coord <- rcp.to.atlas(regi, in.coord)
 
-
